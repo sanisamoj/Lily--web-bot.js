@@ -1,4 +1,4 @@
-# Lily-bot.wpp.js
+# Lily--web-bot.js
 Um bot de interação em grupos de whatsapp.
 
 Ela realiza consultas de clima, cep , notícias e além disso responde algumas interações em grupos, respondendo mensagens, mídias e mandando figurinhas.
