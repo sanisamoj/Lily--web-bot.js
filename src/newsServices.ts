@@ -1,6 +1,7 @@
 const axios = require('axios')
 import * as dotenv from 'dotenv'
 const fs = require('fs')
+dotenv.config()
 
 
 //Função responsável por requisitar e tratar o cep.
@@ -40,7 +41,7 @@ export const servicos = {
         let argCaracters: any = await arg
         let argNoCaracters : any = argCaracters.slice(8).toLowerCase()
         let mensagem: any = "" 
-        const apikeyClima = process.env.API_KEY_CLIMA || "6da95a74"
+        const apikeyClima = process.env.API_KEY_CLIMA
         let cidade: any 
         if (argCaracters) {
             cidade = argNoCaracters
@@ -81,8 +82,9 @@ export const servicos = {
     apiClima: async () => {
         let respostaNormalized: String = ""
         let saida: any = ""
+        const apikeyClima = process.env.API_KEY_CLIMA
 
-        const apiUrl = `https://api.hgbrasil.com/weather?key=94240f77`
+        const apiUrl = `https://api.hgbrasil.com/weather?key=${apikeyClima}`
         
         const api = axios.create(
             {baseURL : apiUrl}
@@ -309,7 +311,7 @@ export const servicos = {
         let respostaNormalized : {}
         let tema = arg || "politica brasileira"
         const arrayNews: any = []
-        const apikey = process.env.API_KEY_NEWS || "f6149ff994b4485f8fb7cf2db360aff0"
+        const apikey = process.env.API_KEY_NEWS 
         
         function dataAtualFormatada(){
             var data : any = new Date(),
@@ -321,17 +323,8 @@ export const servicos = {
             return anoF+"/"+mesF+"/"+diaF;
         }
 
-        function dataAtualFormatadaInicial(){
-            var data : any = new Date(),
-                diaF : String = "01",
-                mes : String = (data.getMonth()+1).toString(), //+1 pois no getMonth Janeiro começa com zero.
-                mesF : String = (mes.length == 1) ? '0'+mes : mes,
-                anoF : String = data.getFullYear();
-            return anoF+"/"+mesF+"/"+diaF;
-        }
-
-        dotenv.config()
-        const apiUrl : String = `https://newsapi.org/v2/everything?q=${tema.toLowerCase()}&from=${dataAtualFormatadaInicial()}to=${dataAtualFormatada()}&language=pt&sortBy=publishedAt&apiKey=${apikey}`
+        
+        const apiUrl : String = `https://newsapi.org/v2/everything?q=${tema.toLowerCase()}&from=${dataAtualFormatada()}to=${dataAtualFormatada()}&language=pt&sortBy=publishedAt&apiKey=${apikey}`
         
         const api = axios.create(
             {baseURL : apiUrl}
@@ -344,7 +337,7 @@ export const servicos = {
             })
 
         } catch (e) {
-            console.log("Erro de requisição")
+            return
         }
 
         if (arrayNews[0].totalResults != 0) {
@@ -374,7 +367,7 @@ export const servicos = {
             }
             
         } else {
-            let msgDataEmpty : string = "*Desculpa, mas eu não achei nada com o título pesquisado.*\n_Tenta pesquisar o título de uma diferente ex :_\n*_/notícias Crimes_*\n*_/notícias Política internacional_*"
+            let msgDataEmpty : string = "*Desculpa, não achei nada com o título pesquisado.*\n_Tenta pesquisar o título de uma forma diferente ex :_\n*_/notícias Crimes_*\n*_/notícias Política internacional_*"
             respostaNormalized = { txt : msgDataEmpty, linkImg : null}
         }
 

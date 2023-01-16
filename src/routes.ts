@@ -1,5 +1,4 @@
 const path = require('path')
-import puppeteer from 'puppeteer'
 import WAWebJS, { MessageMedia, Client } from 'whatsapp-web.js'
 const qrcode = require('qrcode-terminal')
 import { servicos } from './newsServices'
@@ -53,8 +52,7 @@ async function Lily() {
         client.on('message', async (message: any) => {
             const chatP: any = await message.getChat()
             const isGroup: number = message.from.search('@g')
-            let thisGroup : any
-
+            
             //função para enviar mensagens apenas para "chats on"
             async function sendToChatsV2(m : string){
                 const mychats: any = await client.getChats();
@@ -75,108 +73,106 @@ async function Lily() {
                 }
             }
 
+            //Retorna o grupo
+            async function retornoGrupo() {
+                const controleChat: any = await message.getChat()
+                let groupMetaData: String = controleChat['groupMetadata']['id']['user']
+                let valueReturned : any
+                const found = cadeiaGrupos.find( (element : any) => {
+                    return element.grupo === groupMetaData
+                })
+                if (found) {
+                    valueReturned = `GroupId : ${found.grupo}\nValor de possibilidade: ${found.possible} | Chat : ${found.chat}`
+                }
+
+                return valueReturned
+            }
+
+            //Função para retornar o valor de cada grupo
+            async function DataControlSet() {
+                const controleChat: any = await message.getChat()
+                let groupMetaData: String = controleChat['groupMetadata']['id']['user']
+                let valueReturned : number = 2
+                const found = cadeiaGrupos.find( (element : any) => {
+                    return element.grupo === groupMetaData
+                })
+                if (found) {
+                    valueReturned = found.possible
+                }
+
+                return valueReturned
+            }
+
+            //Coloca o valor escolhido no possible do grupo atual
+            async function SetControl_possible(arg? : number) {
+                const controleChat: any = await message.getChat()
+                let valuePossible: number = arg || 1
+                let groupMetaData: String = controleChat['groupMetadata']['id']['user']
+                for (let i = 0; i < cadeiaGrupos.length; i++) {
+                    if (groupMetaData == cadeiaGrupos[i].grupo) {
+                        cadeiaGrupos[i].possible = valuePossible
+                    } 
+                }
+                return 
+            }
+
+            //Coloca o valor escolhido no possible do grupo atual (chat)
+            async function SetControl_possibleChat(arg? : string) {
+                const controleChat: any = await message.getChat()
+                let argumento : string = arg?.toLowerCase() || ""
+                let valuePossible: string 
+                if (argumento == "") {
+                    valuePossible = 'on'
+                } else if (argumento == 'on' || argumento == 'off') {
+                    valuePossible = argumento
+                } else {
+                    valuePossible = 'undefined'
+                }
+                
+                let groupMetaData: String = controleChat['groupMetadata']['id']['user']
+                for (let i = 0; i < cadeiaGrupos.length; i++) {
+                    if (groupMetaData == cadeiaGrupos[i].grupo) {
+                        cadeiaGrupos[i].chat = valuePossible
+                    } 
+                }
+                return 
+            }
+
+            //função que adiciona o grupo a cadeiasGrupos caso ele não exista       
+            async function DataGroupPush() {
+                const controleChat: any = await message.getChat()
+                let groupMetaData: String = controleChat['groupMetadata']['id']['user']
+                const found : any = cadeiaGrupos.find((element: any) => {
+                    return element.grupo === groupMetaData
+                })
+                if (found == undefined) {
+                    let valuePossible: any = await DataControlSet()
+                    const SetGroup : any = { grupo: groupMetaData, possible: valuePossible, chat : 'off' }
+                    cadeiaGrupos.push(SetGroup)
+                }            
+                return 
+            }
        
             try {
-                                //Identifica se as mensagens são de grupo ou não.
-                if (isGroup != -1) {
-
-                    //Controle de grupos-----------------------------------------
-
-                    //Retorna o grupo
-                    async function retornoGrupo() {
-                        const controleChat: any = await message.getChat()
-                        let groupMetaData: String = controleChat['groupMetadata']['id']['user']
-                        let valueReturned : any
-                        const found = cadeiaGrupos.find( (element : any) => {
-                            return element.grupo === groupMetaData
-                        })
-                        if (found) {
-                            valueReturned = `GroupId : ${found.grupo}\nValor de possibilidade: ${found.possible} | Chat : ${found.chat}`
-                        }
-
-                        return valueReturned
-                    }
-
-                    thisGroup = await retornoGrupo()
-                        
-                    //Função para retornar o valor de cada grupo
-                    async function DataControlSet() {
-                        const controleChat: any = await message.getChat()
-                        let groupMetaData: String = controleChat['groupMetadata']['id']['user']
-                        let valueReturned : number = 2
-                        const found = cadeiaGrupos.find( (element : any) => {
-                            return element.grupo === groupMetaData
-                        })
-                        if (found) {
-                            valueReturned = found.possible
-                        }
-
-                        return valueReturned
-                    }
-
-                    //Coloca o valor escolhido no possible do grupo atual
-                    async function SetControl_possible(arg? : number) {
-                        const controleChat: any = await message.getChat()
-                        let valuePossible: number = arg || 1
-                        let groupMetaData: String = controleChat['groupMetadata']['id']['user']
-                        for (let i = 0; i < cadeiaGrupos.length; i++) {
-                            if (groupMetaData == cadeiaGrupos[i].grupo) {
-                                cadeiaGrupos[i].possible = valuePossible
-                            } 
-                        }
-                        return 
-                    }
-
-                    //Coloca o valor escolhido no possible do grupo atual (chat)
-                    async function SetControl_possibleChat(arg? : string) {
-                        const controleChat: any = await message.getChat()
-                        let argumento : string = arg?.toLowerCase() || ""
-                        let valuePossible: string 
-                        if (argumento == "") {
-                            valuePossible = 'on'
-                        } else if (argumento == 'on' || argumento == 'off') {
-                            valuePossible = argumento
-                        } else {
-                            valuePossible = 'undefined'
-                        }
-                        
-                        let groupMetaData: String = controleChat['groupMetadata']['id']['user']
-                        for (let i = 0; i < cadeiaGrupos.length; i++) {
-                            if (groupMetaData == cadeiaGrupos[i].grupo) {
-                                cadeiaGrupos[i].chat = valuePossible
-                            } 
-                        }
-                        return 
-                    }
-                    
-                    //função que adiciona o grupo a cadeiasGrupos caso ele não exista       
-                    async function DataGroupPush() {
-                        const controleChat: any = await message.getChat()
-                        let groupMetaData: String = controleChat['groupMetadata']['id']['user']
-                        const found : any = cadeiaGrupos.find((element: any) => {
-                            return element.grupo === groupMetaData
-                        })
-                        if (found == undefined) {
-                            let valuePossible: any = await DataControlSet()
-                            const SetGroup : any = { grupo: groupMetaData, possible: valuePossible, chat : 'off' }
-                            cadeiaGrupos.push(SetGroup)                        
-                        }            
-                        return 
-                    }
-                        
+                //Identifica se as mensagens são de grupo ou não.
+                if (isGroup != -1) {                         
                     //declarações
                     DataGroupPush()
+                    let thisGroup: any
+                    thisGroup = await retornoGrupo()
                     var valueThisGroup = await DataControlSet()
-                    var possibleMsg : number = valueThisGroup
-                    const possibleMsgSticker : number = 2
-                    const sticker : any = MessageMedia.fromFilePath(path.join(__dirname, "/stickers" + services.sendSticker()))
+                    var possibleMsg: number = valueThisGroup
+                    
+                    const possibleMsgSticker : number = 2                    
                     const possibilidadeSticker : number = Math.floor(Math.random() * possibleMsgSticker)
                     const result : number = Math.floor(Math.random() * possibleMsg)
                     const respostaAuto: any = await services.analiseDeContexto(message.body)
                     const chat: WAWebJS.Chat = await message.getChat()
                     
-                    let msgSemAcento : string = message.body.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase() //Mensagem sem acento para /notícias
-                    let resultadoCep: String = "" 
+                    let msgSemAcento : string = message.body.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase() //Mensagem sem acento para /notícias          
+                    let mensagemNormlized: string = message.body.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase().replaceAll(" ", "")
+                    let msgf: any = message.body.toUpperCase()
+                    let msgFormatada: String = msgf.replaceAll(" ", "")
                                                 
                     //Retorno de mensagem para controle
                     const bodyMessage : any = {
@@ -187,7 +183,6 @@ async function Lily() {
                     }
 
                     //Quando recebe LILY
-                    let mensagemNormlized : string = message.body.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase().replaceAll(" ", "")
                     if (mensagemNormlized.search("LILY") != -1 && mensagemNormlized.search('/') == -1) {
                         const arrayMensagemLily = ['Qualquer coisa só digitar */comandos*', 'Oi?', 'oq?',
                             'Posso te ajudar? Só digitar */comandos*', 'Fala ai', 'digita *_/comandos_* ai pow',
@@ -258,10 +253,7 @@ async function Lily() {
                                 message.reply("*Você não é admin para alterar isso!*")
                             }
 
-                    }
-
-                    //Controle de possibilidade in Wpp como admin -------- enviar mensagens sem ngm requisitar
-                    
+                    }                   
                         
                     //Aqui faz as verificações e possibilidades de respostas
                     if (result == 0) {
@@ -274,6 +266,7 @@ async function Lily() {
                                     message.reply(`${resultMidia['mensagem']}`)
                                     break
                                 case message.hasMedia == true && possibilidadeSticker != 0:
+                                    const sticker : any = MessageMedia.fromFilePath(path.join(__dirname, "/stickers" + services.sendSticker()))
                                     chat.sendMessage(sticker, { sendMediaAsSticker: true })
                                     break
                                 case respostaAuto['envio'] == false:
@@ -283,33 +276,13 @@ async function Lily() {
                                     console.log('Erro : Não passou in case')
                             }
                     }
-                        
-                        
-        //---------------------------------------------Comandos---------------------------------------------------------
-                    
-                    let msgf: any = message.body.toUpperCase()
-                    let msgFormatada: String = msgf.replaceAll(" ", "")
-                    let boasVindas : string = 'Oiee, sou a *-- Lily --* serei a nova companheira do grupo de vocês\n\n\
-Eu posso por enquanto marcar todos do grupo, realizar um sorteio e marcar uma pessoa aleatóriamente, posso também animar o grupo quando estiver muito silencioso, posso contar algumas piadas, notícias e ainda interagir com algumas mensagens.\n\n\
-Para ver o que eu posso fazer você pode me chamar digitando meu *nome*, ou */Comandos*\n\n\
-*Palavras chaves até o momento:* _Sair, risadas(kkk) Quero, Legal, Otimo, Sim, Acho, Verdade, Vamos, links, Clima, Melhor, Concordo, Vou, Vai, Vamo, Pix, Compro, Recebi, Comprei, Paguei, Dinheiro, Caro_'
-                    let comandos : string = '*_Meus comandos por enquanto são:_*\n\n\
-*/Lily* - _Aqui você me chama_\n\
-*/Comandos* - _Aqui eu te mostro meus Comandos_\n\
-*/Todos* - Aqui eu marco todos os usuários do Grupo_\n\
-*/Boasvindas* - _Aqui eu me apresento para o Grupo_ :)\n\
-*/Sorteio* - _Aqui eu sorteio ou escolho aleatoriamente algum usuário do grupo e marco ele_\n\
-*/Noticias* - _Aqui eu mostro uma noticia simples para você_ ex: */Notícias Política*\n\
-*/Cep* - _Aqui eu te retorno o cep pesquisado_ ex: */cep 04163050*\n\
-*/Climas* - _Retorno o clima dos próximos 6 dias_\n\
-*/possible* - _Aqui é controlado a frequência de respostas (Apenas admin)_'
-                    
-                    
-                            
+                                               
+//---------------------------------------------Comandos---------------------------------------------------------                     
                     switch (true) {
 
-                                //Comando /boasvindas --- Retorna a apresentação da Lily
+                        //Comando /boasvindas --- Retorna a apresentação da Lily
                         case msgFormatada === '/BOASVINDAS':
+                            let boasVindas : string = 'Oiee, sou a *-- Lily --* serei a nova companheira do grupo de vocês\n\nEu posso por enquanto marcar todos do grupo, realizar um sorteio e marcar uma pessoa aleatóriamente, posso também animar o grupo quando estiver muito silencioso, posso contar algumas piadas, notícias e ainda interagir com algumas mensagens.\n\nPara ver o que eu posso fazer você pode me chamar digitando meu *nome*, ou */Comandos*\n\n*Palavras chaves até o momento:* _Sair, risadas(kkk) Quero, Legal, Otimo, Sim, Acho, Verdade, Vamos, links, Clima, Melhor, Concordo, Vou, Vai, Vamo, Pix, Compro, Recebi, Comprei, Paguei, Dinheiro, Caro_'
                             chat.sendMessage(boasVindas)
                             break
                         //Comando /todos --- Retorna uma menção de todos os usuários do grupo.
@@ -326,7 +299,8 @@ Para ver o que eu posso fazer você pode me chamar digitando meu *nome*, ou */Co
 
                             await chat.sendMessage(text, {mentions});
                             break
-                        case msgf === '/COMANDOS':                   
+                        case msgf === '/COMANDOS':
+                            let comandos : string = '*_Meus comandos por enquanto são:_*\n\n*/Lily* - _Aqui você me chama_\n*/Comandos* - _Aqui eu te mostro meus Comandos_\n*/Todos* - Aqui eu marco todos os usuários do Grupo_\n*/Boasvindas* - _Aqui eu me apresento para o Grupo_ :)\n*/Sorteio* - _Aqui eu sorteio ou escolho aleatoriamente algum usuário do grupo e marco ele_\n*/Noticias* - _Aqui eu mostro uma noticia simples para você_ ex: */Notícias Política*\n*/Cep* - _Aqui eu te retorno o cep pesquisado_ ex: */cep 04163050*\n*/Climas* - _Retorno o clima dos próximos 6 dias_\n*/possible* - _Aqui é controlado a frequência de respostas (Apenas admin)_'
                             message.reply(comandos)
                             break
                         //Comando /Sorteio --- Retorna um  usuário aleatoriamente
@@ -375,6 +349,7 @@ Para ver o que eu posso fazer você pode me chamar digitando meu *nome*, ou */Co
                             if (cepPesquisado.slice(4) == '' || cepPesquisado.slice(4).search('-') != -1 ) {
                                     message.reply("Percebi algo diferente, tenta assim: */Cep 04163050*")
                             } else {
+                                let resultadoCep: String = "" 
                                 resultadoCep = await services.cep(cepPesquisado)
                                 message.reply(resultadoCep)
                             }
