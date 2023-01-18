@@ -37,14 +37,14 @@ async function Lily() {
         //Evento quando um usuário entra no grupo
         client.on('group_join', async (response: any) => {
             let chat: WAWebJS.Chat = await response.getChat()
-            chat.sendMessage(`*Oie, qualquer coisa só digitar* *_/comandos ou me chamar._*`)
+            await chat.sendMessage(`*Oie, qualquer coisa só digitar* *_/comandos ou me chamar._*`)
             
         })
         //evento para quando o usuário sai do grupo
         client.on('group_leave', async (response: any) => {
             let chat: WAWebJS.Chat = await response.getChat()
             const msgGrouLeave = ['Vai com deus!', 'vai e não volta hein', 'tchau!']
-            chat.sendMessage(msgGrouLeave[Math.floor(Math.random() * msgGrouLeave.length)])
+            await chat.sendMessage(msgGrouLeave[Math.floor(Math.random() * msgGrouLeave.length)])
             
         })
 
@@ -69,7 +69,7 @@ async function Lily() {
             async function sendToChats(m : string){
                 const mychats = await client.getChats();
                 for(let chat of mychats){
-                    chat.sendMessage(m);
+                    await chat.sendMessage(m);
                 }
             }
 
@@ -259,7 +259,7 @@ async function Lily() {
                     if (result == 0) {
                             switch (true) {
                                 case message.hasMedia == false && respostaAuto['envio'] == true :
-                                    chat.sendMessage(`${respostaAuto['mensagem']}`)
+                                    await chat.sendMessage(`${respostaAuto['mensagem']}`)
                                     break
                                 case message.hasMedia == true && possibilidadeSticker == 0:
                                     const resultMidia : any = await services.analiseDeContexto('MIDIA')
@@ -267,7 +267,7 @@ async function Lily() {
                                     break
                                 case message.hasMedia == true && possibilidadeSticker != 0:
                                     const sticker : any = MessageMedia.fromFilePath(path.join(__dirname, "/stickers" + services.sendSticker()))
-                                    chat.sendMessage(sticker, { sendMediaAsSticker: true })
+                                    await chat.sendMessage(sticker, { sendMediaAsSticker: true })
                                     break
                                 case respostaAuto['envio'] == false:
                                     //case para uso especial
@@ -283,7 +283,7 @@ async function Lily() {
                         //Comando /boasvindas --- Retorna a apresentação da Lily
                         case msgFormatada === '/BOASVINDAS':
                             let boasVindas : string = 'Oiee, sou a *-- Lily --* serei a nova companheira do grupo de vocês\n\nEu posso por enquanto marcar todos do grupo, realizar um sorteio e marcar uma pessoa aleatóriamente, posso também animar o grupo quando estiver muito silencioso, posso contar algumas piadas, notícias e ainda interagir com algumas mensagens.\n\nPara ver o que eu posso fazer você pode me chamar digitando meu *nome*, ou */Comandos*\n\n*Palavras chaves até o momento:* _Sair, risadas(kkk) Quero, Legal, Otimo, Sim, Acho, Verdade, Vamos, links, Clima, Melhor, Concordo, Vou, Vai, Vamo, Pix, Compro, Recebi, Comprei, Paguei, Dinheiro, Caro_'
-                            chat.sendMessage(boasVindas)
+                            await chat.sendMessage(boasVindas)
                             break
                         //Comando /todos --- Retorna uma menção de todos os usuários do grupo.
                         case msgf === '/TODOS':
@@ -313,7 +313,7 @@ async function Lily() {
                                 return contato = await array[Math.floor(Math.random() * qnt)]
                             }
                             let serialized : any = await client.getContactById(contato.id._serialized)
-                            chat.sendMessage("Estou sorteando....")
+                            await chat.sendMessage("Estou sorteando....")
                             setTimeout(async () => {
                                 await chat.sendMessage(`Não teve pra onde correr, foi você @${contato.id.user}`, {
                                     mentions: [serialized]
