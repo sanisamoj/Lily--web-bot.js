@@ -59,7 +59,7 @@ async function Lily() {
                 for (let chat of mychats) {
                     cadeiaGrupos.map((item: any) => {
                         if (item.chat == 'on' && item.grupo == chat.id.user) {
-                            await chat.sendMessage(m)
+                            chat.sendMessage(m)
                         } else {return}
                     })                    
                 }
