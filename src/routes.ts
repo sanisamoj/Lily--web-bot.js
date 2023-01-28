@@ -33,13 +33,13 @@ export class Lily {
         //Evento quando um usuário entra no grupo
         client.on('group_join', async (response: any) => {
             const chat: WAWebJS.Chat = await response.getChat()
-            await chat.sendMessage(`*Oie, qualquer coisa só digitar* *_/comandos ou me chamar._*`)
+            await chat.sendMessage(`*Oie, qualquer coisa só digitar* *_/comandos ou me chamar 😊._*`)
             
         })
         //evento para quando o usuário sai do grupo
         client.on('group_leave', async (response: any) => {
             const chat: WAWebJS.Chat = await response.getChat()
-            const msgGrouLeave = ['Vai com deus!', 'vai e não volta hein', 'tchau!']
+            const msgGrouLeave = ['Vai com deus!', 'vai e não volta hein 😂😂', 'tchau!']
             await chat.sendMessage(msgGrouLeave[Math.floor(Math.random() * msgGrouLeave.length)])
             
         })
@@ -171,7 +171,7 @@ export class Lily {
                     //Quando recebe LILY
                     if (mensagemNormlized.search("LILY") != -1 && mensagemNormlized.search('/') == -1) {
                         const arrayMensagemLily = ['Qualquer coisa só digitar */comandos*', 'Oi?', 'oq?',
-                            'Posso te ajudar? Só digitar */comandos*', 'Fala ai', 'digita *_/comandos_* ai pow',
+                            'Posso te ajudar? Só digitar */comandos* 😁', 'Fala ai😉', 'digita *_/comandos_* ai pow',
                         ]
 
                         let resultado : string = arrayMensagemLily[Math.floor(Math.random() * arrayMensagemLily.length)]
@@ -211,7 +211,7 @@ export class Lily {
                         let yAdmin : boolean = false
                         chat.participants.map((data: any) => {
                             if (data.isAdmin == true && message.author.search(data.id.user) != -1) {
-                                message.reply('*Configurações alteradas*')
+                                message.reply('*Configurações alteradas😘*')
                                 SetControl_possibleChat(msgAnormlized)
                                 yAdmin = true
                                     
@@ -269,7 +269,7 @@ export class Lily {
 
                         //Comando /boasvindas --- Retorna a apresentação da Lily
                         case msgFormatada === '/BOASVINDAS':
-                            let boasVindas : string = 'Oiee, sou a *-- Lily --* serei a nova companheira do grupo de vocês\n\nEu posso por enquanto marcar todos do grupo, realizar um sorteio e marcar uma pessoa aleatóriamente, posso também animar o grupo quando estiver muito silencioso, posso contar algumas piadas, notícias e ainda interagir com algumas mensagens.\n\nPara ver o que eu posso fazer você pode me chamar digitando meu *nome*, ou */Comandos*\n\n*Palavras chaves até o momento:* _Sair, risadas(kkk) Quero, Legal, Otimo, Sim, Acho, Verdade, Vamos, links, Clima, Melhor, Concordo, Vou, Vai, Vamo, Pix, Compro, Recebi, Comprei, Paguei, Dinheiro, Caro_'
+                            let boasVindas : string = 'Oiee, sou a *-- Lily --* serei a nova companheira do grupo de vocês❤️\n\nEu posso por enquanto marcar todos do grupo, realizar um sorteio e marcar uma pessoa aleatóriamente, posso também animar o grupo quando estiver muito silencioso, posso contar algumas piadas, notícias e ainda interagir com algumas mensagens.\n\nPara ver o que eu posso fazer você pode me chamar digitando meu *nome*, ou */Comandos* 😉\n\n*Palavras chaves até o momento:* _Sair, risadas(kkk) Quero, Legal, Otimo, Sim, Acho, Verdade, Vamos, links, Clima, Melhor, Concordo, Vou, Vai, Vamo, Pix, Compro, Recebi, Comprei, Paguei, Dinheiro, Caro_'
                             await chat.sendMessage(boasVindas)
                             break
                         //Comando /todos --- Retorna uma menção de todos os usuários do grupo.
@@ -302,7 +302,7 @@ export class Lily {
                             let serialized : any = await client.getContactById(contato.id._serialized)
                             await chat.sendMessage("Estou sorteando....")
                             setTimeout(async () => {
-                                await chat.sendMessage(`Não teve pra onde correr, foi você @${contato.id.user}`, {
+                                await chat.sendMessage(`Não teve pra onde correr, foi você @${contato.id.user} 😁😂`, {
                                     mentions: [serialized]
                                 })
                             }, 1500)
@@ -327,14 +327,14 @@ export class Lily {
                                     await chat.sendMessage(media, {caption: apiNews.txt})
                                 }          
                             } catch (erro) {
-                                message.reply("*_Sorry, os servidores das fontes estão meio lentos, tenta mais uma vez pf._*")
+                                message.reply("*_Sorry, os servidores das fontes estão meio lentos, tenta mais uma vez pf._ 😑*")
                             }                                 
                             break
                         //Comando /Cep --- Retorna o cep pesquisado
                         case msgf.slice(0, 4) == '/CEP':  
                             const cepPesquisado : string = msgf.slice(4).replaceAll(" ", "")
                             if (cepPesquisado.slice(4) == '' || cepPesquisado.slice(4).search('-') != -1 ) {
-                                    message.reply("Percebi algo diferente, tenta assim: */Cep 04163050*")
+                                    message.reply("Percebi algo diferente, tenta assim: */Cep 04163050* 😉")
                             } else {
                                 let resultadoCep: String = "" 
                                 resultadoCep = await services.cep(cepPesquisado)

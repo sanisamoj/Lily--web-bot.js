@@ -30,7 +30,7 @@ export const servicos = {
         
             
         } catch (error) {
-            retorno = "*Não conseguir achar esse cep*"
+            retorno = "*Não conseguir achar esse cep* 😑"
         }
 
         return retorno
@@ -99,7 +99,7 @@ export const servicos = {
             })
             
         } catch (error) {
-            respostaNormalized = "Não conseguir achar o clima :("
+            respostaNormalized = "Não conseguir achar o clima 🙄"
             
         }    
         
@@ -112,13 +112,12 @@ export const servicos = {
 
         let resultado
             
-        const arrayMensagemSair = [{ envio : true, mensagem: 'Boa, to pensando sair hoje tbm' },
+        const arrayMensagemSair = [{ envio : true, mensagem: 'Boa, to pensando sair hoje tbm 😅' },
             { envio : true, mensagem: `Vai sair né?!`}, 
             { envio : true, mensagem: 'Nem falou que ia sair, tava querendo também.... ' },
             { envio : true, mensagem: 'Vai sair de novo? Chama os parsas dessa vez pow' },
             { envio : true, mensagem: 'Carai, ce gosta de sair hein kkkkkk' },
-            { envio : true, mensagem: 'Chama o João e a Mari que eles mau saem de casa' },
-            { envio : true, mensagem: 'Bora no ceará kkkk' },
+            { envio : true, mensagem: 'Bora no ceará 😂😂' },
             { envio : true, mensagem: 'Cuidado hein, tá perigoso' },
             { envio: true, mensagem: 'Leva a blusa de frio' },
             { envio : true, mensagem: 'Esse povo só sai' },
@@ -145,12 +144,14 @@ export const servicos = {
             { envio: true, mensagem: 'kkkk' },
             { envio: true, mensagem: 'shuashuashuashua' },
             { envio: true, mensagem: 'shuashuashuashua' },
+            { envio: true, mensagem: '😂😂' },
+            { envio: true, mensagem: '😂😂😂😂😂'},
             
         ]
 
-        const arrayMensagemQuero = [{ envio : true, mensagem: 'Eu também quero' },
+        const arrayMensagemQuero = [{ envio : true, mensagem: 'Eu também quero 😂' },
             { envio : true, mensagem: 'Querer não é poder!' },
-            { envio : true, mensagem: 'Eu também quero, mas querer não é poder!' },
+            { envio : true, mensagem: 'Eu também quero, mas querer não é poder! 🤣' },
             { envio : true, mensagem: 'Eu quero' },
             { envio : true, mensagem: 'Boa, eu também quero' },
             { envio : true, mensagem: 'Se desse para mim, eu iria' },
@@ -174,7 +175,8 @@ export const servicos = {
             { envio: true, mensagem: 'Chave' },
             { envio: true, mensagem: 'Slc, bom de mais' },
             { envio: true, mensagem: 'Melhor' },
-            { envio : true, mensagem: 'É bom msm' },
+            { envio: true, mensagem: 'É bom msm' },
+            { envio : true, mensagem: '❤️' },
         ]
 
         const arrayMensagemSim = [{ envio : true, mensagem: 'Concordo' },
@@ -190,14 +192,15 @@ export const servicos = {
             { envio: true, mensagem: 'Só vc pensa assim' },
             { envio: true, mensagem: 'Eu tbm penso assim' },
             { envio: true, mensagem: 'Se todo mundo pensasse assim...' },
-            { envio : true, mensagem: 'Exemplo...?' },
+            { envio: true, mensagem: 'Exemplo...?' },
+            { envio : true, mensagem: '👍' }
         ]
 
         const arrayMensagemVamos = [{ envio : true, mensagem: 'Bora' },
-            { envio : true, mensagem: 'Vou tbm' },
-            { envio : true, mensagem: 'Eu queria ir , mas tenho que ficar vendo os grupos' },
+            { envio : true, mensagem: 'Vou tbm 😂' },
+            { envio : true, mensagem: 'Eu queria ir , mas tenho que ficar vendo os grupos 🙄' },
             { envio : true, mensagem: 'Mas tem que ser rápido se for para ir' },
-            { envio : true, mensagem: 'Demoraram de mais para falarem isso' },
+            { envio : true, mensagem: 'Demoraram de mais para falarem isso😁' },
             { envio : true, mensagem: 'Eu tbm vou' },
             { envio : true, mensagem: 'Queria ir se fossem todos juntos' },
             { envio : true, mensagem: 'Vou pensar' },
@@ -211,8 +214,8 @@ export const servicos = {
         ]      
 
         const arrayMensagemCompro = [{ envio : true, mensagem: 'Tá com dinheiro né....' },
-            { envio : true, mensagem: 'Pagamento já caiu?' },
-            { envio : true, mensagem: 'Divide com os pobres esse dinheiro todo ai' },
+            { envio : true, mensagem: 'Pagamento já caiu?😍' },
+            { envio : true, mensagem: 'Divide com os pobres esse dinheiro todo ai😂😎' },
             { envio : true, mensagem: 'Tá podre de ricx né' },
             { envio : true, mensagem: 'faz um pix para mim tbm' },
             { envio : true, mensagem: 'trampo bom esse seu, manda meu currículo' },
