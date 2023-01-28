@@ -8,19 +8,12 @@ const PORT = process.env.PORT
 
 
 //Inicializção dos apps
-admin.on('mount', async function (parent: any) {
-    
-    try {
-        Lily()
-        
-    } catch (e) {
-        console.log("Erro critico, Lily não respondendo...")
-    }
-
+admin.on('mount', async function (parent: any) {   
+    const app = new Lily()
+    app.execute()
 })
 
 app.use('/admin', admin)
-
 
 //Tratamento de erros ----------------------------
 app.use((err : Error, req : Request, res : Response, next : NextFunction) => {

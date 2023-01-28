@@ -1,13 +1,13 @@
 const path = require('path')
-import WAWebJS, { MessageMedia, Client } from 'whatsapp-web.js'
+import WAWebJS, { MessageMedia } from 'whatsapp-web.js'
 const qrcode = require('qrcode-terminal')
 import { servicos } from './newsServices'
 
-const services: any = servicos
-var cadeiaGrupos: any = [{ grupo: "indefinido", possible: 3, chat: 'null' }]
+const services = servicos
+var cadeiaGrupos = [{ grupo: "indefinido", possible: 3, chat: 'null' }]
 
-async function Lily() {
-    try {
+export class Lily {
+    async execute() {
         //Login via cache
         const { Client, LocalAuth } = require('whatsapp-web.js');
         const client = new Client({
@@ -16,33 +16,29 @@ async function Lily() {
 
         });
         
-        client.on('qr', (qr : any) => {
-            qrcode.generate(qr, {small: true});
+        client.on('qr', (qr: any) => {
+            qrcode.generate(qr, { small: true });
+        });
+
+        client.on('qr', (qr: any) => {
+            qrcode.generate(qr, { small: true });
         });
 
         client.on('ready', () => {
             console.log('Cliente está pronto!')
-
-            //Função para pegar horário
-            function Hours() {
-                let hr : any = new Date()
-                let hrFormated : string = hr.toLocaleTimeString('pt-BR')
-                return hrFormated.slice(0, 2)               
-            }            
-            
         });
 
         client.initialize();
 
         //Evento quando um usuário entra no grupo
         client.on('group_join', async (response: any) => {
-            let chat: WAWebJS.Chat = await response.getChat()
+            const chat: WAWebJS.Chat = await response.getChat()
             await chat.sendMessage(`*Oie, qualquer coisa só digitar* *_/comandos ou me chamar._*`)
             
         })
         //evento para quando o usuário sai do grupo
         client.on('group_leave', async (response: any) => {
-            let chat: WAWebJS.Chat = await response.getChat()
+            const chat: WAWebJS.Chat = await response.getChat()
             const msgGrouLeave = ['Vai com deus!', 'vai e não volta hein', 'tchau!']
             await chat.sendMessage(msgGrouLeave[Math.floor(Math.random() * msgGrouLeave.length)])
             
@@ -50,25 +46,25 @@ async function Lily() {
 
         //EventLister quando recebe mensagens
         client.on('message', async (message: any) => {
-            const chatP: any = await message.getChat()
-            const isGroup: number = message.from.search('@g')
+            const chat = await message.getChat()
+            const isGroup = message.from.search('@g')
             
             //função para enviar mensagens apenas para "chats on"
-            async function sendToChatsV2(m : string){
+            async function sendToChatsV2(m: string) {
                 const mychats: any = await client.getChats();
                 for (let chat of mychats) {
                     cadeiaGrupos.map((item: any) => {
                         if (item.chat == 'on' && item.grupo == chat.id.user) {
                             chat.sendMessage(m)
-                        } else {return}
-                    })                    
+                        } else { return }
+                    })
                 }
             }
 
             //função para mandar mensagens para todos os contatos e grupos
-            async function sendToChats(m : string){
+            async function sendToChats(m: string) {
                 const mychats = await client.getChats();
-                for(let chat of mychats){
+                for (let chat of mychats) {
                     await chat.sendMessage(m);
                 }
             }
@@ -77,8 +73,8 @@ async function Lily() {
             async function retornoGrupo() {
                 const controleChat: any = await message.getChat()
                 let groupMetaData: String = controleChat['groupMetadata']['id']['user']
-                let valueReturned : any
-                const found = cadeiaGrupos.find( (element : any) => {
+                let valueReturned: any
+                const found = cadeiaGrupos.find((element: any) => {
                     return element.grupo === groupMetaData
                 })
                 if (found) {
@@ -92,8 +88,8 @@ async function Lily() {
             async function DataControlSet() {
                 const controleChat: any = await message.getChat()
                 let groupMetaData: String = controleChat['groupMetadata']['id']['user']
-                let valueReturned : number = 2
-                const found = cadeiaGrupos.find( (element : any) => {
+                let valueReturned: number = 2
+                const found = cadeiaGrupos.find((element: any) => {
                     return element.grupo === groupMetaData
                 })
                 if (found) {
@@ -104,23 +100,23 @@ async function Lily() {
             }
 
             //Coloca o valor escolhido no possible do grupo atual
-            async function SetControl_possible(arg? : number) {
+            async function SetControl_possible(arg?: number) {
                 const controleChat: any = await message.getChat()
                 let valuePossible: number = arg || 1
                 let groupMetaData: String = controleChat['groupMetadata']['id']['user']
                 for (let i = 0; i < cadeiaGrupos.length; i++) {
                     if (groupMetaData == cadeiaGrupos[i].grupo) {
                         cadeiaGrupos[i].possible = valuePossible
-                    } 
+                    }
                 }
-                return 
+                return
             }
 
             //Coloca o valor escolhido no possible do grupo atual (chat)
-            async function SetControl_possibleChat(arg? : string) {
+            async function SetControl_possibleChat(arg?: string) {
                 const controleChat: any = await message.getChat()
-                let argumento : string = arg?.toLowerCase() || ""
-                let valuePossible: string 
+                let argumento: string = arg?.toLowerCase() || ""
+                let valuePossible: string
                 if (argumento == "") {
                     valuePossible = 'on'
                 } else if (argumento == 'on' || argumento == 'off') {
@@ -133,54 +129,44 @@ async function Lily() {
                 for (let i = 0; i < cadeiaGrupos.length; i++) {
                     if (groupMetaData == cadeiaGrupos[i].grupo) {
                         cadeiaGrupos[i].chat = valuePossible
-                    } 
+                    }
                 }
-                return 
+                return
             }
 
             //função que adiciona o grupo a cadeiasGrupos caso ele não exista       
             async function DataGroupPush() {
                 const controleChat: any = await message.getChat()
                 let groupMetaData: String = controleChat['groupMetadata']['id']['user']
-                const found : any = cadeiaGrupos.find((element: any) => {
+                const found: any = cadeiaGrupos.find((element: any) => {
                     return element.grupo === groupMetaData
                 })
                 if (found == undefined) {
                     let valuePossible: any = await DataControlSet()
-                    const SetGroup : any = { grupo: groupMetaData, possible: valuePossible, chat : 'off' }
+                    const SetGroup: any = { grupo: groupMetaData, possible: valuePossible, chat: 'off' }
                     cadeiaGrupos.push(SetGroup)
-                }            
-                return 
+                }
+                return
             }
-       
+
             try {
                 //Identifica se as mensagens são de grupo ou não.
                 if (isGroup != -1) {                         
                     //declarações
                     DataGroupPush()
-                    let thisGroup: any
-                    thisGroup = await retornoGrupo()
-                    var valueThisGroup = await DataControlSet()
-                    var possibleMsg: number = valueThisGroup
-                    
+                    const thisGroup = await retornoGrupo()
+                    const valueThisGroup = await DataControlSet()
+
+                    const possibleMsg: number = valueThisGroup                 
                     const possibleMsgSticker : number = 2                    
                     const possibilidadeSticker : number = Math.floor(Math.random() * possibleMsgSticker)
                     const result : number = Math.floor(Math.random() * possibleMsg)
-                    const respostaAuto: any = await services.analiseDeContexto(message.body)
-                    const chat: WAWebJS.Chat = await message.getChat()
                     
-                    let msgSemAcento : string = message.body.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase() //Mensagem sem acento para /notícias          
-                    let mensagemNormlized: string = message.body.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase().replaceAll(" ", "")
-                    let msgf: any = message.body.toUpperCase()
-                    let msgFormatada: String = msgf.replaceAll(" ", "")
-                                                
-                    //Retorno de mensagem para controle
-                    const bodyMessage : any = {
-                        autor: `${message.author}`,
-                        isGroup: `${message.from}`,
-                        message: `${message.body}`,
-                        hours: `${Date()}`
-                    }
+                    
+                    const msgSemAcento : string = message.body.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase() //Mensagem sem acento para /notícias          
+                    const mensagemNormlized: string = message.body.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase().replaceAll(" ", "")
+                    const msgf: any = message.body.toUpperCase()
+                    const msgFormatada: String = msgf.replaceAll(" ", "")
 
                     //Quando recebe LILY
                     if (mensagemNormlized.search("LILY") != -1 && mensagemNormlized.search('/') == -1) {
@@ -196,17 +182,17 @@ async function Lily() {
                             'e ajudo mais digitando */comandos*', 'digita *_/comandos_* ai pow',
                         ]
 
-                        let resultado : string = arrayMensagemLily[Math.floor(Math.random() * arrayMensagemLily.length)]
+                        const resultado : string = arrayMensagemLily[Math.floor(Math.random() * arrayMensagemLily.length)]
                         message.reply(resultado)
                     }
 
                     //Controle de possibilidade in Wpp como admin 
                     if ((message.body.slice(0, 9) == '/possible')) {
-                        let msgAnormlized: number = parseInt(message.body.slice(9).replaceAll(" ", "")) || 3
-                        var yAdmin : boolean = false
-                        chatP.participants.map((data: any) => {
+                        const msgAnormlized: number = parseInt(message.body.slice(9).replaceAll(" ", "")) || 3
+                        let yAdmin : boolean = false
+                        chat.participants.map((data: any) => {
                             if (data.isAdmin == true && message.author.search(data.id.user) != -1) {
-                                message.reply('*Configurações alteradas*')
+                                message.reply('*Configurações alteradas 😜*')
                                 SetControl_possible(msgAnormlized)
                                 yAdmin = true
                                     
@@ -221,9 +207,9 @@ async function Lily() {
                     
                     //Controle de possibilidade in Wpp como admin -------- enviar mensagens sem ngm requisitar
                     if ((message.body.slice(0, 5) == '/chat')) {
-                        let msgAnormlized: string = message.body.slice(5).replaceAll(" ", "")
-                        var yAdmin : boolean = false
-                        chatP.participants.map((data: any) => {
+                        const msgAnormlized: string = message.body.slice(5).replaceAll(" ", "")
+                        let yAdmin : boolean = false
+                        chat.participants.map((data: any) => {
                             if (data.isAdmin == true && message.author.search(data.id.user) != -1) {
                                 message.reply('*Configurações alteradas*')
                                 SetControl_possibleChat(msgAnormlized)
@@ -240,8 +226,8 @@ async function Lily() {
 
                     //Ver informações do grupo atual
                     if ((message.body.slice(0, 6) == '/group')) {
-                        var yAdmin : boolean = false
-                        chatP.participants.map((data: any) => {
+                        let yAdmin : boolean = false
+                        chat.participants.map((data: any) => {
                             if (data.isAdmin == true && message.author.search(data.id.user) != -1) {                              
                                 message.reply(thisGroup)
                                 yAdmin = true
@@ -257,6 +243,7 @@ async function Lily() {
                         
                     //Aqui faz as verificações e possibilidades de respostas
                     if (result == 0) {
+                        const respostaAuto: any = await services.analiseDeContexto(message.body)                       
                             switch (true) {
                                 case message.hasMedia == false && respostaAuto['envio'] == true :
                                     await chat.sendMessage(`${respostaAuto['mensagem']}`)
@@ -290,7 +277,7 @@ async function Lily() {
                             let text : any = "";
                             let mentions : any = [];
 
-                            for (let participant of chatP.participants) {
+                            for (let participant of chat.participants) {
                                 const contact : any = await client.getContactById(participant.id._serialized);
 
                                 mentions.push(contact);
@@ -305,7 +292,7 @@ async function Lily() {
                             break
                         //Comando /Sorteio --- Retorna um  usuário aleatoriamente
                         case msgf === '/SORTEIO':
-                            const array : any = chatP.participants
+                            const array : any = chat.participants
                             let qnt : number = await array.length
                             let valorSorteado : number = Math.floor(Math.random() * qnt)
                             let contato: any = await array[valorSorteado]
@@ -385,15 +372,7 @@ async function Lily() {
             } catch (e) {
                 return
             }
+
         })
-    // Caso a Lily venha apresentar erros, ela é desligada em outro arquivo com LyOn == false
-    } catch (e) {
-        console.log(e)
     }
-        
-            
-            
-}
-
-
-export {Lily}
+}    
