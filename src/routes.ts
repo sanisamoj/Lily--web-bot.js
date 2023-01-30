@@ -356,12 +356,12 @@ export class Lily {
                             case message.body.slice(0, 8) == '/talkAll':                                   
                                 let msgTalkAll: string = message.body.slice(9)
                                 message.reply(`_Vou enviar sua mensagem para todos os usuários._\n_msg :_ ${msgTalkAll}`)
-                                sendToChats(msgTalkAll) 
+                                await sendToChats(msgTalkAll) 
                                 break
                             case message.body.slice(0, 5) == '/talk':
                                 let msgTalk: string = message.body.slice(6)
                                 message.reply(`_Vou enviar sua mensagem para os grupos com o CHAT-ON._\n_msg :_ *${msgTalk}*`)
-                                sendToChatsV2(msgTalk)
+                                await sendToChatsV2(msgTalk)
                                 break                             
                             default:
                                 message.reply("Não entendi esse comando-admin")
