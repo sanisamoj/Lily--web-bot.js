@@ -1,6 +1,6 @@
 import express, { Request, NextFunction, Response } from 'express'
 import 'express-async-errors'
-import { Lily } from './LilyBot'
+import { BotPrototype } from './lily'
 
 const app : any = express()
 var admin: any = express()
