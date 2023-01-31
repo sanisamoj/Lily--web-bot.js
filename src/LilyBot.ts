@@ -2,6 +2,7 @@ import { Client, LocalAuth, Message, MessageMedia } from 'whatsapp-web.js'
 import qrcode from 'qrcode-terminal'
 import { servicos } from './newsServices'
 import path from 'path'
+import { BotPrototype } from './lily'
 
 interface bot_id {
     id: string
