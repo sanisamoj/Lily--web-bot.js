@@ -9,8 +9,7 @@ const PORT = process.env.PORT
 
 //Inicializção dos apps
 admin.on('mount', async function (parent: any) {   
-    const app = new Lily()
-    app.execute()
+    const app = new BotPrototype({ id : '00001', bot_name : 'Lily'})
 })
 
 app.use('/admin', admin)

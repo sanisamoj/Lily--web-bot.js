@@ -1,4 +1,4 @@
-import { Client, LocalAuth, Message, MessageMedia } from 'whatsapp-web.js'
+import { Client, LocalAuth, Message, MessageMedia, NoAuth } from 'whatsapp-web.js'
 import qrcode from 'qrcode-terminal'
 import { servicos } from './newsServices'
 import path from 'path'
