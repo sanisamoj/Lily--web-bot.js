@@ -32,3 +32,12 @@ app.use((err : Error, req : Request, res : Response, next : NextFunction) => {
 app.listen(PORT, () => {
     console.log("Servidor Online")
 })
+
+process.on('uncaughtException', (error, origin) => {
+    console.log(`\n${origin} signal received. \n${error}`)
+})
+
+process.on('unhandledRejection', (error) => {
+    console.log(`unhandledRejection signal received. \n${error}`)
+})
+
