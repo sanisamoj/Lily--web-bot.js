@@ -35,6 +35,7 @@ app.listen(PORT, () => {
 
 process.on('uncaughtException', (error, origin) => {
     console.log(`\n${origin} signal received. \n${error}`)
+    const app = new BotPrototype({ id : '00001', bot_name : 'Lily'})
 })
 
 process.on('unhandledRejection', (error) => {
