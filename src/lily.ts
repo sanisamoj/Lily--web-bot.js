@@ -222,7 +222,11 @@ export class BotPrototype {
                             text += `@${participant.id.user}`;
                         }
 
-                        chat.sendMessage(text, {mentions});
+                        try {
+                            chat.sendMessage(text, {mentions});
+                        } catch (err) {
+                            console.log(err)
+                        }
                         break
                     case message_normalized === '/COMANDOS':
                         let comandos : string = '*_Meus comandos por enquanto são:_*\n\n*/Lily* - _Aqui você me chama_\n*/Comandos* - _Aqui eu te mostro meus Comandos_\n*/Todos* - Aqui eu marco todos os usuários do Grupo_\n*/Boasvindas* - _Aqui eu me apresento para o Grupo_ :)\n*/Sorteio* - _Aqui eu sorteio ou escolho aleatoriamente algum usuário do grupo e marco ele_\n*/Noticias* - _Aqui eu mostro uma noticia simples para você_ ex: */Notícias Política*\n*/Cep* - _Aqui eu te retorno o cep pesquisado_ ex: */cep 04163050*\n*/Climas* - _Retorno o clima dos próximos 6 dias_\n*/possible* - _Aqui é controlado a frequência de respostas (Apenas admin)_'
@@ -342,7 +346,11 @@ export class BotPrototype {
             } else {
                 if (message.id.remote.slice(0, 13) != '5511998342464') {
                     let msgInPv = "Meu criador não permite mais que eu mande mensagem no pv :(\n\nChama ele no pv - https://wa.me/5511998342464"
-                    message.reply(msgInPv)
+                    try {
+                        message.reply(msgInPv)
+                    } catch (err) {
+                        return
+                    }
 
                 } else {
                     switch (true) {
@@ -361,7 +369,11 @@ export class BotPrototype {
                             sendToChatsV2(msgTalk, this.client)
                             break                             
                         default:
-                            message.reply("Não entendi esse comando-admin")
+                            try {
+                                message.reply("Não entendi esse comando-admin")
+                            } catch (err) {
+                                return
+                            }
                     }
                 }
             }
