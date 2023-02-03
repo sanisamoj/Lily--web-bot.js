@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn src/server.ts"
+    "dev": "ts-node-dev --respawn src/server.ts",
+    "build" : "tsc",
+    "start" : "pm2 start build/server.js -i max"
   },
   "license": "MIT",
   "dependencies": {
