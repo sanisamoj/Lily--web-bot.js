@@ -151,7 +151,7 @@ export class BotPrototype {
                         const arrayMensagemLily: string[] = ['Qualquer coisa só digitar */comandos*', 'Oi?', 'oq?','Posso te ajudar? Só digitar */comandos*', 'Fala ai', 'digita *_/comandos_* ai pow']
                         const messageDrawn: string = arrayMensagemLily[Math.floor(Math.random() * arrayMensagemLily.length)]
                         try {
-                            message.reply(messageDrawn)
+                            await message.reply(messageDrawn)
                         } catch (err) {
                             return
                         }
@@ -160,7 +160,7 @@ export class BotPrototype {
                         const arrayMensagemLily2 = ['Qualquer coisa só digitar */comandos*', 'Posso te ajudar? Só digitar */comandos*', 'e ajudo mais digitando */comandos*', 'digita *_/comandos_* ai pow']
                         const messageDrawn2 : string = arrayMensagemLily2[Math.floor(Math.random() * arrayMensagemLily2.length)]
                         try {
-                            message.reply(messageDrawn2)
+                            await message.reply(messageDrawn2)
                         } catch (err) {
                             return
                         }
@@ -171,7 +171,7 @@ export class BotPrototype {
                                 if (data.isAdmin == true && message.author!.search(data.id.user) != -1) {
                                     SetControl_possible(chat, valuePossible)
                                     try {
-                                        message.reply('*Configurações alteradas 😜*')
+                                        await message.reply('*Configurações alteradas 😜*')
                                     } catch (err) {
                                         return
                                     }
@@ -184,7 +184,7 @@ export class BotPrototype {
                             if (data.isAdmin == true && message.author!.search(data.id.user) != -1) {
                                 SetControl_possibleChat(chat, valueChat)     
                                 try {
-                                    message.reply('*Configurações alteradas*')
+                                    await message.reply('*Configurações alteradas*')
                                 } catch (err) {
                                     return
                                 }
@@ -196,7 +196,7 @@ export class BotPrototype {
                         chat.participants.map(async (data: any) => {
                             if (data.isAdmin == true && message.author!.search(data.id.user) != -1) {                              
                                 try { 
-                                    message.reply(thisGroup) 
+                                    await message.reply(thisGroup) 
                                 } catch (err) {
                                     return
                                 }                              
@@ -231,7 +231,7 @@ export class BotPrototype {
                     case message_normalized === '/COMANDOS':
                         let comandos : string = '*_Meus comandos por enquanto são:_*\n\n*/Lily* - _Aqui você me chama_\n*/Comandos* - _Aqui eu te mostro meus Comandos_\n*/Todos* - Aqui eu marco todos os usuários do Grupo_\n*/Boasvindas* - _Aqui eu me apresento para o Grupo_ :)\n*/Sorteio* - _Aqui eu sorteio ou escolho aleatoriamente algum usuário do grupo e marco ele_\n*/Noticias* - _Aqui eu mostro uma noticia simples para você_ ex: */Notícias Política*\n*/Cep* - _Aqui eu te retorno o cep pesquisado_ ex: */cep 04163050*\n*/Climas* - _Retorno o clima dos próximos 6 dias_\n*/possible* - _Aqui é controlado a frequência de respostas (Apenas admin)_'
                         try {
-                            message.reply(comandos)
+                            await message.reply(comandos)
                         } catch (err) {
                             return
                         }
@@ -259,7 +259,7 @@ export class BotPrototype {
                     case message_normalized.search('CLIMA') != -1 && message_normalized.search('/') == -1:
                         const clima = await services.apiClima()
                         try {
-                            message.reply(clima)
+                            await message.reply(clima)
                         } catch (err) {
                             return
                         }
@@ -267,7 +267,7 @@ export class BotPrototype {
                     case message_normalized.slice(0, 7) == '/CLIMAS':
                         const apiClima : any = await servicos.apiClimaAllDays(message_normalized)
                         try {
-                            message.reply(apiClima)
+                            await message.reply(apiClima)
                         } catch (err) {
                             return
                         }
@@ -291,7 +291,7 @@ export class BotPrototype {
                             }          
                         } catch (err) {
                             try {
-                                message.reply("*_Sorry, os servidores das fontes estão meio lentos, tenta mais uma vez pf._*")
+                                await message.reply("*_Sorry, os servidores das fontes estão meio lentos, tenta mais uma vez pf._*")
                             } catch (err) {
                                 return
                             }
@@ -301,13 +301,13 @@ export class BotPrototype {
                         const cepPesquisado : string = message.body.slice(4).replaceAll(" ", "")
                         if (cepPesquisado.slice(4) == '' || cepPesquisado.slice(4).search('-') != -1) {
                             try {
-                                message.reply("Percebi algo diferente, tenta assim: */Cep 04163050*")
+                                await message.reply("Percebi algo diferente, tenta assim: */Cep 04163050*")
                             } catch (err) {
                                 return
                             }
                         } else {
                             const resultadoCep = await services.cep(cepPesquisado)
-                            message.reply(resultadoCep)
+                            await message.reply(resultadoCep)
                         }
                         break
                     default:
@@ -325,7 +325,7 @@ export class BotPrototype {
                             break
                         case message.hasMedia == true && possibleToSendSticker == 0:
                             try {
-                                message.reply(resultMidia.mensagem)
+                                await message.reply(resultMidia.mensagem)
                             } catch (err) {
                                 return
                             }
@@ -347,7 +347,7 @@ export class BotPrototype {
                 if (message.id.remote.slice(0, 13) != '5511998342464') {
                     let msgInPv = "Meu criador não permite mais que eu mande mensagem no pv :(\n\nChama ele no pv - https://wa.me/5511998342464"
                     try {
-                        message.reply(msgInPv)
+                        await message.reply(msgInPv)
                     } catch (err) {
                         return
                     }
@@ -357,7 +357,7 @@ export class BotPrototype {
                         case message.body.slice(0, 8) == '/talkAll':                                   
                             const msgTalkAll: string = message.body.slice(9)
                             try {
-                                message.reply(`_Vou enviar sua mensagem para todos os usuários._\n_msg :_ ${msgTalkAll}`)
+                                await message.reply(`_Vou enviar sua mensagem para todos os usuários._\n_msg :_ ${msgTalkAll}`)
                             } catch (err) {
                                 return
                             }
@@ -365,12 +365,12 @@ export class BotPrototype {
                             break
                         case message.body.slice(0, 5) == '/talk':
                             const msgTalk: string = message.body.slice(6)
-                            message.reply(`_Vou enviar sua mensagem para os grupos com o CHAT-ON._\n_msg :_ *${msgTalk}*`)
+                            await message.reply(`_Vou enviar sua mensagem para os grupos com o CHAT-ON._\n_msg :_ *${msgTalk}*`)
                             sendToChatsV2(msgTalk, this.client)
                             break                             
                         default:
                             try {
-                                message.reply("Não entendi esse comando-admin")
+                                await message.reply("Não entendi esse comando-admin")
                             } catch (err) {
                                 return
                             }
