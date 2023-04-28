@@ -4,11 +4,12 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev --respawn src/server.ts",
-    "build" : "tsc",
-    "start" : "pm2 start build/server.js -i max"
+    "build": "tsc",
+    "start": "pm2 start build/server.js -i max"
   },
   "license": "MIT",
   "dependencies": {
+    "@types/qrcode-terminal": "^0.12.0",
     "axios": "^1.2.2",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
