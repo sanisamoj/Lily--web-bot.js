@@ -1,6 +1,6 @@
 import express, { Request, NextFunction, Response } from 'express'
 import 'express-async-errors'
-import { BotPrototype } from './lily'
+import { BotPrototype } from './bot'
 
 const app : any = express()
 var admin: any = express()
@@ -9,7 +9,7 @@ const PORT = process.env.PORT
 
 //Inicializção dos apps
 admin.on('mount', async function (parent: any) {   
-    const app = new BotPrototype({ id : '00001', bot_name : 'Lily'})
+    const app = new BotPrototype()
 })
 
 app.use('/admin', admin)
@@ -35,7 +35,7 @@ app.listen(PORT, () => {
 
 process.on('uncaughtException', (error, origin) => {
     console.log(`\n${origin} signal received. \n${error}`)
-    const app = new BotPrototype({ id : '00001', bot_name : 'Lily'})
+    const app = new BotPrototype()
 })
 
 process.on('unhandledRejection', (error) => {

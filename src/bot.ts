@@ -1,12 +1,7 @@
-import { Client, LocalAuth, Message, MessageMedia, NoAuth } from 'whatsapp-web.js'
-import qrcode from 'qrcode-terminal'
+import { Client, LocalAuth, Message, MessageMedia } from "whatsapp-web.js";
+import qrcode from 'qrcode-terminal';
 import { servicos } from './newsServices'
 import path from 'path'
-
-interface bot_id {
-    id: string
-    bot_name: string
-}
 
 const services = servicos
 let cadeiaGrupos = [{ grupo: "indefinido", possible: 3, chat: 'null' }]
@@ -103,41 +98,43 @@ async function DataGroupPush(chat: any) {
     return
 }
 //Função que formata o texto , para maiusculo, remove acentos e espaços
-async function messageNormalized(messageBody : string) {
+async function messageNormalized(messageBody : any) {
     const message_normalized: string = messageBody.normalize('NFD').replace(/[\u0300-\u036f]/g, "").toUpperCase().replaceAll(" ", "")
     return message_normalized
 }
 
 export class BotPrototype {
-    id: string
-    bot_name: string
-    client: Client
-    qr_code!: string
-    
-    constructor({ id, bot_name }: bot_id) {
-        this.id = id
-        this.bot_name = bot_name
+    client : Client
+    qr_code! : string
+
+    constructor() {
         this.client = new Client({
             puppeteer: { headless: true, args: ['--no-sandbox', '--disable-setuid-sandbox'] },
             authStrategy: new LocalAuth()
-        });
-
-        this.client.on('qr', (qr: string) => {
-            qrcode.generate(qr, { small: true });
-            this.qr_code = qr
-        });
-
+    });
+    
+        this.client.on('qr', qr => {
+            qrcode.generate(qr, {small:true});
+            console.log(qr)
+        })
+        
         this.client.on('ready', () => {
-            console.log(`Client ${bot_name} already!`)
+            console.log('Bot online!')
         });
-
+        
         this.client.initialize();
         
+        this.client.on('message', message => {
+            if(message.body === '!ping') {
+                message.reply('pong');
+            }
+        });
+
         this.client.on('message', async (message: Message) => {
             const chat : any = await message.getChat()
             const isGroup = message.from.search('@g')
             const message_normalized = await messageNormalized(message.body)
-
+        
             if (isGroup !== -1) {
                 await DataGroupPush(chat)
                 const possibleThisGroup: number = await DataControlSet(chat)
@@ -145,7 +142,7 @@ export class BotPrototype {
                 const possibleToSendSticker: number = Math.floor(Math.random() * 2)
                 const respostaAuto: any = await services.analiseDeContexto(message_normalized)
                 const resultMidia: any = await services.analiseDeContexto('MIDIA')
-
+        
                 switch (true) {
                     case message_normalized.search('LILY') != -1 && message_normalized.search('/') == -1: //Quando recebe /lily ou lily
                         const arrayMensagemLily: string[] = ['Qualquer coisa só digitar */comandos*', 'Oi?', 'oq?','Posso te ajudar? Só digitar */comandos*', 'Fala ai', 'digita *_/comandos_* ai pow']
@@ -214,14 +211,14 @@ export class BotPrototype {
                     case message_normalized === '/TODOS':
                         let text : any = "";
                         let mentions : any = [];
-
+        
                         for (let participant of chat.participants) {
                             const contact : any = await this.client.getContactById(participant.id._serialized);
-
+        
                             mentions.push(contact);
                             text += `@${participant.id.user}`;
                         }
-
+        
                         try {
                             chat.sendMessage(text, {mentions});
                         } catch (err) {
@@ -313,12 +310,12 @@ export class BotPrototype {
                     default:
                         break
                 }
-
+        
                 if (possibleToSendMessage == 0) {
                     switch (true) {
                         case message.hasMedia == false && respostaAuto != undefined:
                             try {
-                                this.client.sendMessage(message.from, respostaAuto.mensagem)
+                                await this.client.sendMessage(message.from, respostaAuto.mensagem)
                             } catch (err) {
                                 return
                             }
@@ -342,7 +339,7 @@ export class BotPrototype {
                             break
                     }
                 }
-
+        
             } else {
                 if (message.id.remote.slice(0, 13) != '5511998342464') {
                     let msgInPv = "Meu criador não permite mais que eu mande mensagem no pv :(\n\nChama ele no pv - https://wa.me/5511998342464"
@@ -351,9 +348,12 @@ export class BotPrototype {
                     } catch (err) {
                         return
                     }
-
+        
                 } else {
                     switch (true) {
+                        case message.body == '/comandos':
+                            await message.reply("*/talkAll* -> Envia mensagem para todos os chats.\n*/talk* -> Envia mensagem  para todos os chat com o CHAT-ON.")
+                            break
                         case message.body.slice(0, 8) == '/talkAll':                                   
                             const msgTalkAll: string = message.body.slice(9)
                             try {
@@ -379,5 +379,8 @@ export class BotPrototype {
             }
         
         })
+    
     }
-}    
+}
+
+
