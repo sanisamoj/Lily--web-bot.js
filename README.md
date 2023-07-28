@@ -5,11 +5,12 @@ Ela realiza consultas de clima, cep , notícias e além disso responde algumas i
 
 Ela identifica algumas palavras chaves e responde frases neutras, reconhece comandos com a barra ***"/Comando aqui"***, por exemplo ***"/todos"*** (que marca todos do grupo).
 
-***Se quiser realizar um teste, entre nesse grupo do whatsapp https://chat.whatsapp.com/BW0lAuabY3j3do0ivHrSWF ela está hospedada em um serviddor com o Debian no Ec2 da Amazon.*** 
+***Se desejar realizar um teste, entre nesse grupo do whatsapp https://chat.whatsapp.com/BW0lAuabY3j3do0ivHrSWF ela está hospedada em um serviddor com o Debian no Ec2 da Amazon.*** 
 Neste grupo você pode no momento em que entrar digitar ***"/boas vindas"*** para que vc possa vizualizar a apresentação dela e as palavras chaves que ela identifica , por padrão no grupo ela tem 50% de possibilidade de responder a mensagens comuns, após você pode digitar ***"/comandos"*** e visualizar os comandos pertinentes para os testes.
 ***Utilizei a Api Whatsapp-web.js para a criação do bot, Nodejs, express e axios para a criação dos códigos.***
 
-
+---
+<br/>
 
 ![lily-vv1-‐-Feito-com-o-Clipchamp](https://user-images.githubusercontent.com/69211869/211605788-5d3cfdd7-757e-483b-8070-99edd47b21dd.gif)
 
@@ -17,6 +18,8 @@ Neste grupo você pode no momento em que entrar digitar ***"/boas vindas"*** par
 
 ![Lily-v2-‐-Feito-com-o-Clipchamp](https://user-images.githubusercontent.com/69211869/211604398-f89f424d-1ca1-4579-9cac-29a8d046c07f.gif)
 
-Caso queira instalar em sua máquina, é só clonar o projeto, digitar no cmd da pasta "npm install", e rodar o comando "npm run dev", irá aparecer um código QRcode no cmd, com o seu celular , no aplicativo do whatsapp, aponte a câmera para parelhar com o bot.
-Algumas funções poderão não funcionar devido a apiKey de serviços, como o clima e as notícias.
+---
+Caso queira instalar em sua máquina, é só clonar o projeto, digitar no cmd da pasta ***"npm install"***, e rodar o comando ***"npm run dev"***, irá aparecer um código ***QRcode*** no cmd, com o seu celular , no aplicativo do whatsapp, aponte a câmera para parelhar com o bot.
+
+⚠️ Algumas funções poderão não funcionar devido a apiKey de serviços, como o clima e as notícias.
 
