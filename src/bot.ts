@@ -341,7 +341,7 @@ export class BotPrototype {
                 }
         
             } else {
-                if (message.id.remote.slice(0, 13) != '5511998342464') {
+                if (message.id.remote.slice(0, 13) != '5511998342464') { // Número do admin do bot aqui
                     let msgInPv = "Meu criador não permite mais que eu mande mensagem no pv :(\n\nChama ele no pv - https://wa.me/5511998342464"
                     try {
                         await message.reply(msgInPv)
