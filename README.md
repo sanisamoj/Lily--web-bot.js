@@ -19,6 +19,9 @@ Neste grupo você pode no momento em que entrar digitar ***"/boas vindas"*** par
 ![Lily-v2-‐-Feito-com-o-Clipchamp](https://user-images.githubusercontent.com/69211869/211604398-f89f424d-1ca1-4579-9cac-29a8d046c07f.gif)
 
 ---
+
+## Instalação
+
 Caso queira instalar em sua máquina, é só clonar o projeto, digitar no cmd da pasta ***"npm install"***, e rodar o comando ***"npm run dev"***, irá aparecer um código ***QRcode*** no cmd, com o seu celular , no aplicativo do whatsapp, aponte a câmera para parelhar com o bot.
 
 ⚠️ Algumas funções poderão não funcionar devido a apiKey de serviços, como o clima e as notícias.
