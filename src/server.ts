@@ -1,44 +1,34 @@
-import express, { Request, NextFunction, Response } from 'express'
-import 'express-async-errors'
-import { BotPrototype } from './bot'
+//Este arquivo é responsável por ligar o servidor, e direcionar as rotas a serem feitas.
 
-const app : any = express()
-var admin: any = express()
-const PORT = process.env.PORT
+import Fastify, { FastifyInstance } from 'fastify'
+import { bot } from './AdminBot'
 
-
-//Inicializção dos apps
-admin.on('mount', async function (parent: any) {   
-    const app = new BotPrototype()
+const fastify: FastifyInstance = Fastify({
+    logger: true,
+    disableRequestLogging: true
 })
 
-app.use('/admin', admin)
+const app: bot = new bot()
 
-//Tratamento de erros ----------------------------
-app.use((err : Error, req : Request, res : Response, next : NextFunction) => {
-    if (err instanceof Error) {
-        return res.status(400).json({
-            error : err.message
-        })
+
+
+const start = async () => {
+    try {
+        await fastify.listen({ port: 3000, host: '0.0.0.0' })
+    } catch (err) {
+        fastify.log.error(err)
+        process.exit
     }
+}
 
-    return res.status(500).json({
-        status: "error",
-        message : "internal error"
-    })
-})
-
-
-app.listen(PORT, () => {
-    console.log("Servidor Online")
-})
+start()
 
 process.on('uncaughtException', (error, origin) => {
     console.log(`\n${origin} signal received. \n${error}`)
-    const app = new BotPrototype()
 })
 
 process.on('unhandledRejection', (error) => {
     console.log(`unhandledRejection signal received. \n${error}`)
 })
 
+export default fastify
